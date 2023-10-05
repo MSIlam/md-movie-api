@@ -1,0 +1,7 @@
+* {
+    box-sizing: border-box;
+  }
+main {
+    margin: 150px;
+    padding-top: 50px;
+}
