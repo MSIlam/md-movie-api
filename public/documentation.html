@@ -4,42 +4,236 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie hub</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../css/styles.css" type="text/css" />
   </head>
   <body>
-    <div>
-      <h1>Movie API</h1>
-    </div>
-    <div>
-      <p>
-        Using a combination of Node.js, Express application, and REST
-        architecture an API is created that contains resources for a movie app
-        development that would contain many functionalities based on user
-        demands.
-      </p>
-      <h2>App features</h2>
-      <ol>
-        <li>Return a list of ALL movies to the user</li>
-        <li>
-          Return data (description, genre, director, image URL, whether it’s
-          featured or not) about a single movie by title to the user
-        </li>
-        <li>
-          Return data about a genre (description) by name/title (e.g.,
-          “Thriller”)
-        </li>
-        <li>
-          Return data about a director (bio, birth year, death year) by name
-        </li>
-        <li>Allow new users to register</li>
-        <li>
-          Allow users to update their user info (username, password, email, date
-          of birth)
-        </li>
-        <li>Allow users to add a movie to their list of favorites</li>
-        <li>Allow users to remove a movie from their list of favorites</li>
-        <li>Allow existing users to deregister</li>
-      </ol>
-      <h2>API contents</h2>
-    </div>
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <h2>MI developer</h2>
+        </div>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        <h1>MovieHub API</h1>
+      </div>
+      <div class="container">
+        <p>
+          Using a combination of Node.js, Express application, and REST
+          architecture an API is created that contains resources for a movie app
+          development that would deliver many functionalities based on user
+          demands. Key features of the app is given below:
+        </p>
+        <h2>App features</h2>
+        <ol>
+          <li>Return a list of ALL movies to the user</li>
+          <li>
+            Return data (description, genre, director, image URL, whether its
+            featured or not) about a single movie by title to the user
+          </li>
+          <li>
+            Return data about a genre (description) by name/title (e.g.,
+            “Thriller”)
+          </li>
+          <li>
+            Return data about a director (bio, birth year, death year) by name
+          </li>
+          <li>Allow new users to register</li>
+          <li>
+            Allow users to update their user info (username, password, email,
+            date of birth)
+          </li>
+          <li>Allow users to add a movie to their list of favorites</li>
+          <li>Allow users to remove a movie from their list of favorites</li>
+          <li>Allow existing users to deregister</li>
+        </ol>
+      </div>
+      <div class="container">
+        <h2>API documentation</h2>
+      </div>
+      <!-- Add a bootstrap table -->
+      <div class="container">
+        <table
+          class="table table-striped table-bordered align-top table-responsive{lg|-md|-sm|-lg|-xxl}"
+        >
+          <thead>
+            <tr>
+              <th scope="col">Request</th>
+              <th scope="col">URL endpoints</th>
+              <th scope="col">HTTP methods</th>
+              <th scope="col">Request data format</th>
+              <th scope="col">Response data format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Show a list of all movies</td>
+              <td>/topMovies</td>
+              <td>GET</td>
+              <td>none</td>
+              <td>A JSON object holding data about movies</td>
+            </tr>
+            <tr>
+              <td>Show data of a single movie by its title</td>
+              <td>/topMovies/title</td>
+              <td>GET</td>
+              <td>none</td>
+              <td>
+                A JSON object holding data about a single movie, containing
+                description, genre, director,Stars, image URL, and whether it’s
+                featured or not property. Example:
+                <code>
+                  { "Title": "Saving Private Rayan", "Description": "Following
+                  the Normandy Landings, a group of ..", "Generes": [ "War",
+                  "Action", "Adventure" ], "Year": "1998", "Director": { "name":
+                  "Steven Spielberg", "Bio": "One of the most influential
+                  personalities..", "Birth": 1946 }, "ImageURL":
+                  "https://www.imdb.com/title/tt0120815/mediaviewer/rm1924732160/?ref_=tt_ov_i",
+                  "Featured": false, "Stars": [ "Tom Hanks", "Matt Damon", "Tom
+                  Sizemore" ] }</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Get data about a genere by name</td>
+              <td>/topMovies/genere/genereName</td>
+              <td>GET</td>
+              <td>none</td>
+              <td>
+                A JSON object holding data about a genere and its description.
+                Example:
+                <code>
+                  { "Name": "Romance", "Description": "Romance films involve
+                  romantic love stories recorded in visual media for broadcast
+                  in theatres or on television that focus on passion, emotion,
+                  and the affectionate romantic involvement of the main
+                  characters. Typically their journey through dating." }</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Show data about a director by name</td>
+              <td>/topMovies/director/directorName</td>
+              <td>GET</td>
+              <td>none</td>
+              <td>
+                A JSON object holding data about a director. Example:
+                <code>
+                  { "name": "Steven Spielberg", "Bio": "One of the most
+                  influential personalities in the history of cinema, Steven
+                  Spielberg is Hollywood's best known director and one of the
+                  wealthiest filmmakers in the world. He has an extraordinary
+                  number of commercially successful and critically acclaimed
+                  credits to his name, either as a director, producer or writer
+                  since launching the summer blockbuster with Jaws (1975), and
+                  he has done more to define popular film-making since the
+                  mid-1970s than anyone else.", "Birth": 1946}</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Register new user</td>
+              <td>/users</td>
+              <td>POST</td>
+              <td>
+                A JSON object holding new user information. Example:
+                <code
+                  >{ "name": "Shafin", "favouriteMovies": [], "email":
+                  "shafin2024@gmail.com", "password": "ejdekkk339", "Birth":
+                  "15/01/2024" }</code
+                >
+              </td>
+              <td>
+                A JSON object holding information of a new user. Example:
+                <code>
+                  { "name": "Shafin", "favouriteMovies": [], "email":
+                  "shafin2024@gmail.com", "password": "ejdekkk339", "Birth":
+                  "15/01/2024", "id": "a40e5d6e-7cd1-48e2-b2be-37d22dc187c5"
+                  }</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>User info update</td>
+              <td>/users/id</td>
+              <td>PUT</td>
+              <td>
+                A JSON object adding updated user information as following:
+                <code
+                  >{ "name": "Shahir updated", "favouriteMovies": [], "email":
+                  "shafin2024@yahoo.com", "password": "ejdekkk3j", "Birth":
+                  "07-01-2020" }
+                </code>
+              </td>
+              <td>
+                A JSON object holding updated information of a user. Example:
+                <code>
+                  { "id": 2, "name": "Shahir updated", "favouriteMovies": [ "The
+                  Pianist" ], "email": "shafin2024@yahoo.com", "password":
+                  "ejdekkk3j", "Birth": "07-01-2020" }</code
+                >
+              </td>
+            </tr>
+            <tr>
+              <td>Add movie to the list of favourites</td>
+              <td>/users/id/movieTitle</td>
+              <td>POST</td>
+              <td>none</td>
+              <td>
+                A text confirming a favourite movie has been added to a
+                particular user. Example: Forrest Gump has been added to user
+                2's array
+              </td>
+            </tr>
+            <tr>
+              <td>Remove movie to the list of favourites</td>
+              <td>/users/id/movieTitle</td>
+              <td>DELETE</td>
+              <td>none</td>
+              <td>
+                A text confirming a movie has been removed from a particular
+                users favourite list. Example: The Pianist has been removed from
+                the user 2's array
+              </td>
+            </tr>
+            <tr>
+              <td>User deregister</td>
+              <td>/users/id/movieTitle</td>
+              <td>DELETE</td>
+              <td>none</td>
+              <td>
+                A text confirming a user with particular id has been removed
+                from the list. Example: user 2 has been removed from the list
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"
+      ></script>
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"
+      ></script>
+
+      <script src="dist/scripts.min.js"></script>
+    </main>
   </body>
 </html>
