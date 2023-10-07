@@ -21,20 +21,21 @@ let users = [
     favouriteMovies: [],
     email: "Shayan2018@gmail.com",
     password: "sjdjnd",
-    Birth: "18-02-2018",
+    birthdate: "18-02-2018",
   },
   {
     id: 2,
     name: "Shahir",
-    favouriteMovies: ["The Pianist"],
+    favouriteMovies: [{ Title: "The Pianist", movieID: 4 }],
     email: "Shahir2020@gmail.com",
     password: "idcjooo",
-    Birth: "06-01-2020",
+    birthdate: "06-01-2020",
   },
 ];
 
 let topMovies = [
   {
+    movieID: 1,
     Title: "Saving Private Rayan",
     Description:
       "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.",
@@ -56,6 +57,7 @@ let topMovies = [
     Stars: "Tom Hanks, Matt Damon, Tom Sizemore",
   },
   {
+    movieID: 2,
     Title: "The Shawshank Redemption",
     Description:
       "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
@@ -76,6 +78,7 @@ let topMovies = [
     Featured: false,
   },
   {
+    movieID: 3,
     Title: "Forrest Gump",
     Description:
       "The history of the United States from the 1950s to the '70s unfolds from the perspective of an Alabama man with an IQ of 75, who yearns to be reunited with his childhood sweetheart.",
@@ -154,13 +157,24 @@ app.get("/", (req, res) => {
 // Allow new users to register [CREATE]
 app.post("/users", (req, res) => {
   const newUser = req.body;
-
-  if (newUser.name) {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).json(newUser);
+  // Validate name, email, password, and birthdate
+  if (
+    !newUser.name ||
+    !newUser.email ||
+    !newUser.password ||
+    !newUser.birthdate
+  ) {
+    res
+      .status(400)
+      .send("Please provide name, email, password, and birthdate.");
   } else {
-    res.status(400).send("user need names");
+    // Generate a unique ID for the new user
+    newUser.id = uuid.v4();
+
+    // Add the new user to the users array
+    users.push(newUser);
+
+    res.status(201).json(newUser);
   }
 });
 
@@ -175,6 +189,8 @@ app.put("/users/:id", (req, res) => {
     user.name = updatedUser.name;
     user.email = updatedUser.email;
     user.password = updatedUser.password;
+    user.Birth = updatedUser.Birth;
+    user.favouriteMovies = updatedUser.favouriteMovies;
     res.status(200).json(user);
   } else {
     res.status(400).send("no such user");
@@ -182,32 +198,43 @@ app.put("/users/:id", (req, res) => {
 });
 
 // Allow users to add a movie to their list of favorites (showing only a text that a movie has been added) [CREATE]
-app.post("/users/:id/:movieTitle", (req, res) => {
+app.post("/users/:id/:movieID", (req, res) => {
   // Destructuring
-  const { id, movieTitle } = req.params;
+  const { id, movieID } = req.params;
   let user = users.find((user) => user.id == id);
 
   if (user) {
-    user.favouriteMovies.push(movieTitle);
-    res.status(200).send(`${movieTitle} has been added to user ${id}\'s array`);
+    const movie = topMovies.find((movie) => movie.movieID == movieID);
+    if (movie) {
+      const movieobject = {
+        title: movie.Title,
+        id: movie.movieID,
+      };
+      user.favouriteMovies.push(movieobject);
+      res.status(200).json(user);
+    } else {
+      res.status(400).send("no such movie found");
+    }
   } else {
-    res.status(400).send("no such user");
+    res.status(400).send("No such user found.");
   }
 });
 
 // Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed) [DELETE]
-app.delete("/users/:id/:movieTitle", (req, res) => {
+app.delete("/users/:id/:movieID", (req, res) => {
   // Destructuring
-  const { id, movieTitle } = req.params;
+  const { id, movieID } = req.params;
   let user = users.find((user) => user.id == id);
 
   if (user) {
     user.favouriteMovies = user.favouriteMovies.filter(
-      (title) => title !== movieTitle
+      (favMovieID) => favMovieID !== movieID
     );
     res
       .status(200)
-      .send(`${movieTitle} has been removed from the user ${id}\'s array`);
+      .send(
+        `Movie ${movieID} has been removed from user ${id}\'s favourite list`
+      );
   } else {
     res.status(400).send("no such user");
   }
@@ -235,9 +262,9 @@ app.get("/topMovies", (req, res) => {
 });
 
 // Return data about a single movie by title to the user [Read]
-app.get("/topMovies/:title", (req, res) => {
-  const title = req.params.title;
-  const movie = topMovies.find((movie) => movie.Title === title);
+app.get("/topMovies/:movieTitle", (req, res) => {
+  const title = req.params.movieTitle;
+  const movie = topMovies.find((movie) => movie.Title == title);
 
   if (movie) {
     res.status(200).json(movie);
