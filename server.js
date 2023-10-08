@@ -41,12 +41,14 @@ let topMovies = [
       "Following the Normandy Landings, a group of U.S. soldiers go behind enemy lines to retrieve a paratrooper whose brothers have been killed in action.",
 
     Generes: {
+      ID: "1",
       Name: "War",
       Description:
         "War film is a film genre concerned with warfare, typically about naval, air, or land battles, with combat scenes central to the drama",
     },
     Year: "1998",
     Director: {
+      ID: 1,
       name: "Steven Spielberg",
       Bio: "One of the most influential personalities in the history of cinema, Steven Spielberg is Hollywood's best known director and one of the wealthiest filmmakers in the world. He has an extraordinary number of commercially successful and critically acclaimed credits to his name, either as a director, producer or writer since launching the summer blockbuster with Jaws (1975), and he has done more to define popular film-making since the mid-1970s than anyone else.",
       Birth: 1946,
@@ -62,12 +64,14 @@ let topMovies = [
     Description:
       "Over the course of several years, two convicts form a friendship, seeking consolation and, eventually, redemption through basic compassion.",
     Generes: {
+      ID: 2,
       Name: "Drama",
       Description:
         "In film and television, drama is a category or genre of narrative fiction (or semi-fiction) intended to be more serious than humorous in tone.",
     },
     Year: "1994",
     Director: {
+      ID: 2,
       name: "Frank Darabont",
       Bio: "Three-time Oscar nominee Frank Darabont was born in a refugee camp in 1959 in Montbeliard, France, the son of Hungarian parents who had fled Budapest during the failed 1956 Hungarian revolution. Brought to America as an infant, he settled with his family in Los Angeles and attended Hollywood High School. His first job in movies was as a production assistant on the 1981 low-budget film",
       Birth: 1959,
@@ -83,12 +87,14 @@ let topMovies = [
     Description:
       "The history of the United States from the 1950s to the '70s unfolds from the perspective of an Alabama man with an IQ of 75, who yearns to be reunited with his childhood sweetheart.",
     Generes: {
+      ID: 3,
       Name: "Romance",
       Description:
         "Romance films involve romantic love stories recorded in visual media for broadcast in theatres or on television that focus on passion, emotion, and the affectionate romantic involvement of the main characters. Typically their journey through dating. ",
     },
     Year: "1994",
     Director: {
+      ID: 3,
       name: "Robert Zemeckis",
       Bio: "A whiz-kid with special effects, Robert is from the Spielberg camp of film-making (Steven Spielberg produced many of his films). Usually working with writing partner Bob Gale, Robert's earlier films show he has a talent for zany comedy (Romancing the Stone (1984), 1941 (1979)) and special effect vehicles (Who Framed Roger Rabbit (1988) and Back to the Future (1985)). His later films have become more serious, with the hugely successful Tom Hanks vehicle Forrest Gump (1994) and the Jodie Foster film Contact (1997), both critically acclaimed movies. Again, these films incorporate stunning effects. Robert has proved he can work a serious story around great effects.",
       Birth: 1952,
