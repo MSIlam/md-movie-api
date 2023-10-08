@@ -189,7 +189,7 @@ app.put("/users/:id", (req, res) => {
     user.name = updatedUser.name;
     user.email = updatedUser.email;
     user.password = updatedUser.password;
-    user.Birth = updatedUser.Birth;
+    user.birthdate = updatedUser.birthdate;
     user.favouriteMovies = updatedUser.favouriteMovies;
     res.status(200).json(user);
   } else {
