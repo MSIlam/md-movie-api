@@ -75,14 +75,14 @@
           <tbody>
             <tr>
               <td>Show a list of all movies</td>
-              <td>/topMovies</td>
+              <td>/movies</td>
               <td>GET</td>
               <td>none</td>
               <td>A JSON object holding data about movies</td>
             </tr>
             <tr>
               <td>Show data of a single movie by its title</td>
-              <td>/topMovies/title</td>
+              <td>/movies/:Title</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -103,7 +103,7 @@
             </tr>
             <tr>
               <td>Get data about a genere by name</td>
-              <td>/topMovies/genere/genereName</td>
+              <td>/movies/Genres/:Name</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -120,7 +120,7 @@
             </tr>
             <tr>
               <td>Show data about a director by name</td>
-              <td>/topMovies/director/directorName</td>
+              <td>/movies/Director/:Name</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -146,23 +146,27 @@
                 A JSON object holding new user information. Example:
                 <code
                   >{ "name": "Shafin", "favouriteMovies": [], "email":
-                  "shafin2024@gmail.com", "password": "ejdekkk339", "Birth":
-                  "15/01/2024" }</code
+                  "shafin@yahoo.com", "password": "sajdjk", "Birth":
+                  "2024-01-07" }</code
                 >
               </td>
               <td>
                 A JSON object holding information of a new user. Example:
                 <code>
-                  { "name": "Shafin", "favouriteMovies": [], "email":
-                  "shafin2024@gmail.com", "password": "ejdekkk339", "Birth":
-                  "15/01/2024", "id": "a40e5d6e-7cd1-48e2-b2be-37d22dc187c5"
+                  { "name": "Shafin", "FavouriteMovies": [
+                  ObjectId("65265dc1fd6624ad8155ec95"),
+                  ObjectId("6526bcb0fd6624ad8155ec98"),
+                  ObjectId("6526c3e0fd6624ad8155ec9d"),
+                  ObjectId("6526c062fd6624ad8155ec9a") ], "email":
+                  "shafin@yahoo.com", "password": "sajdjk", "Birth_date:":
+                  "2024-01-07T00:00:00.000Z", "id": "6526c5d2fd6624ad8155eca0"
                   }</code
                 >
               </td>
             </tr>
             <tr>
               <td>User info update</td>
-              <td>/users/id</td>
+              <td>/users/:_id</td>
               <td>PUT</td>
               <td>
                 A JSON object adding updated user information as following:
@@ -183,7 +187,7 @@
             </tr>
             <tr>
               <td>Add movie to the list of favourites</td>
-              <td>/users/id/movieTitle</td>
+              <td>/users/:_id/:Title</td>
               <td>POST</td>
               <td>none</td>
               <td>
@@ -194,7 +198,7 @@
             </tr>
             <tr>
               <td>Remove movie to the list of favourites</td>
-              <td>/users/id/movieTitle</td>
+              <td>/users/:_id/:Title</td>
               <td>DELETE</td>
               <td>none</td>
               <td>
@@ -205,7 +209,7 @@
             </tr>
             <tr>
               <td>User deregister</td>
-              <td>/users/id/movieTitle</td>
+              <td>/users/:_id</td>
               <td>DELETE</td>
               <td>none</td>
               <td>
