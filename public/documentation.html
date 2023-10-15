@@ -57,6 +57,21 @@
       </div>
       <div class="container">
         <h2>API documentation</h2>
+        <h3>API creation steps</h3>
+        <div>
+          <ul>
+            <li>A Non-Relational database created by MongoDB</li>
+            <li>
+              The database contains a collection of movies and a collection of
+              users
+            </li>
+            <li>A business logic layer in model.js</li>
+            <li>CRUD operation to create a RESTful API</li>
+          </ul>
+        </div>
+      </div>
+      <div class="container">
+        <h3>CRUD operations</h3>
       </div>
       <!-- Add a bootstrap table -->
       <div class="container">
@@ -74,6 +89,13 @@
           </thead>
           <tbody>
             <tr>
+              <td>Show a list of all users</td>
+              <td>/users</td>
+              <td>GET</td>
+              <td>none</td>
+              <td>A JSON object holding data about users</td>
+            </tr>
+            <tr>
               <td>Show a list of all movies</td>
               <td>/movies</td>
               <td>GET</td>
@@ -82,7 +104,7 @@
             </tr>
             <tr>
               <td>Show data of a single movie by its title</td>
-              <td>/topMovies/:movieTitle</td>
+              <td>/movies/:Title</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -103,7 +125,7 @@
             </tr>
             <tr>
               <td>Get data about a genere by name</td>
-              <td>/topMovies/genere/:genereName</td>
+              <td>/movies/Generes/:genereName</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -120,7 +142,7 @@
             </tr>
             <tr>
               <td>Show data about a director by name</td>
-              <td>/topMovies/director/:directorName</td>
+              <td>/movies/Director/:directorName</td>
               <td>GET</td>
               <td>none</td>
               <td>
@@ -166,7 +188,7 @@
             </tr>
             <tr>
               <td>User info update</td>
-              <td>/users/:userID</td>
+              <td>/users/:_id</td>
               <td>PUT</td>
               <td>
                 A JSON object adding updated user information as following:
@@ -187,7 +209,7 @@
             </tr>
             <tr>
               <td>Add movie to the list of favourites</td>
-              <td>/users/:userID/:movieID</td>
+              <td>/users/:_id/:MovieID</td>
               <td>POST</td>
               <td>none</td>
               <td>
@@ -197,8 +219,8 @@
               </td>
             </tr>
             <tr>
-              <td>Remove movie to the list of favourites</td>
-              <td>/users/:userID/:movieID</td>
+              <td>Remove movie from the list of favourites</td>
+              <td>/users/:_id/:MovieId</td>
               <td>DELETE</td>
               <td>none</td>
               <td>
@@ -209,7 +231,7 @@
             </tr>
             <tr>
               <td>User deregister</td>
-              <td>/users/:userID</td>
+              <td>/users/:Username</td>
               <td>DELETE</td>
               <td>none</td>
               <td>
