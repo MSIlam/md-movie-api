@@ -1,29 +1,28 @@
 const mongoose = require("mongoose");
 
 let movieSchema = mongoose.Schema({
-  MovieId: { type: String },
   Title: { type: String, required: true },
   Description: { type: String, required: true },
-  Genre: {
+  Year: String,
+  Director: {
+    Name: String,
+    Bio: String,
+    Birthyear: Date,
+  },
+  ImageURL: String,
+  Stars: String,
+  Featured: Boolean,
+  Genres: {
     genreName: String,
     Description: String,
   },
-  Director: {
-    directorName: String,
-    Bio: String,
-    Birthday: String,
-  },
-  Stars: String,
-  ImageURL: String,
-  Featured: Boolean,
 });
 
 let userSchema = mongoose.Schema({
-  UserId: { type: String },
   Username: { type: String, required: true },
   Password: { type: String, requied: true },
   Email: { type: String, required: true },
-  Birthday: Date,
+  Birth_date: Date,
   FavouriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }],
 });
 

@@ -74,47 +74,34 @@ app.get("/movies/:Title", async (req, res) => {
 });
 
 // return data about a genre
-app.get("/movies/Genres/:genreName", async (req, res) => {
-  await Movies.findOne({ "Genre.genreName": req.params.genreName })
-    .then((movies) => {
-      res.status(200).json(movies.Genres);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error: " + err);
-    });
+app.get("/movies/Genres/:Name", async (req, res) => {
+  const { Name } = req.params;
+  try {
+    const movie = await Movies.findOne({ "Genres.Name": Name });
+    if (movie) {
+      const genre = movie.Genres;
+      res.status(200).json(genre);
+    } else {
+      res.status(404).json({ message: `Genre "${Name}" not found.` });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error: " + err);
+  }
 });
-
-// app.get("/movies/Genres/:Name", async (req, res) => {
-//   const { genreName } = req.params;
-//   try {
-//     const movie = await Movies.findOne({ "Genre.genreName": genreName });
-//     if (movie && movie.Genres) {
-//       const genre = movie.Genres;
-//       res.status(200).json(genre);
-//     } else {
-//       res.status(404).json({ message: `Genre "${Name}" not found.` });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Error: " + err);
-//   }
-// });
 
 //
 // Return data about a director (bio, birth year, death year) by name [Read]
-app.get("/movies/Director/:directorName", async (req, res) => {
-  const { directorName } = req.params;
+app.get("/movies/Director/:Name", async (req, res) => {
+  const { Name } = req.params;
   try {
-    const director = await Movies.findOne({
-      "Director.directorName": directorName,
+    const movies = await Movies.findOne({
+      "Director.Name": Name,
     });
-    if (director) {
-      res.json(director);
+    if (movies) {
+      res.json(movies.Director);
     } else {
-      res
-        .status(404)
-        .json({ message: `Director "${directorName}" not found.` });
+      res.status(404).json({ message: `Director "${Name}" not found.` });
     }
   } catch (err) {
     console.error(err);
@@ -134,7 +121,7 @@ app.post("/users", async (req, res) => {
           Username: req.body.Username,
           Password: req.body.Password,
           Email: req.body.Email,
-          Birthday: req.body.Birthday,
+          Birth_date: req.body.Birth_date,
         })
           .then((user) => {
             res.status(201).json(user);
@@ -178,11 +165,11 @@ app.put("/users/:_id", async (req, res) => {
 //
 // Add a  movie to a user's list of favourites
 
-app.post("/users/:_id/:MovieID", async (req, res) => {
+app.post("/users/:_id/:MovieId", async (req, res) => {
   await Users.findOneAndUpdate(
     { _id: req.params._id },
     {
-      $push: { FavouriteMovies: req.params.MovieID },
+      $push: { FavouriteMovies: req.params.MovieId },
     },
     { new: true }
   )
@@ -228,9 +215,9 @@ app.delete("/users/:Username", async (req, res) => {
   await Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
       if (!user) {
-        res.status(400).send(req.params.Username + "was not found");
+        res.status(400).send(req.params.Username + " was not found");
       } else {
-        res.status(200).send(req.params.Username + "was deleted");
+        res.status(200).send(req.params.Username + " was deleted");
       }
     })
     .catch((err) => {
