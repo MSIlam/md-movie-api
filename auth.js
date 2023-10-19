@@ -14,44 +14,18 @@ let generateJWTToken = (user) => {
 };
 
 /* POST login. */
-// module.exports = (router) => {
-//   router.post("/login", (req, res) => {
-//     passport.authenticate("local", { session: false }, (error, user, info) => {
-//       if (error || !user) {
-//         return res.status(400).json({
-//           message: "Something is not right",
-//           user: user,
-//         });
-//       }
-//       req.login(user, { session: false }, (error) => {
-//         if (error) {
-//           res.send(error);
-//         }
-//         let token = generateJWTToken(user.toJSON());
-//         return res.json({ user, token });
-//       });
-//     })(req, res);
-//   });
-// };
-
-/* POST login. */
 module.exports = (router) => {
   router.post("/login", (req, res) => {
     passport.authenticate("local", { session: false }, (error, user, info) => {
-      if (error) {
-        // Log the error for debugging
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
-      }
-      if (!user) {
-        // Authentication failed
-        return res.status(401).json({ message: "Authentication failed" });
+      if (error || !user) {
+        return res.status(400).json({
+          message: "Something is not right",
+          user: user,
+        });
       }
       req.login(user, { session: false }, (error) => {
         if (error) {
-          // Log the error for debugging
-          console.error(error);
-          return res.status(500).json({ message: "Internal server error" });
+          res.send(error);
         }
         let token = generateJWTToken(user.toJSON());
         return res.json({ user, token });
@@ -59,3 +33,29 @@ module.exports = (router) => {
     })(req, res);
   });
 };
+
+/* POST login. */
+// module.exports = (router) => {
+//   router.post("/login", (req, res) => {
+//     passport.authenticate("local", { session: false }, (error, user, info) => {
+//       if (error) {
+//         // Log the error for debugging
+//         console.error(error);
+//         return res.status(500).json({ message: "Internal server error" });
+//       }
+//       if (!user) {
+//         // Authentication failed
+//         return res.status(401).json({ message: "Authentication failed" });
+//       }
+//       req.login(user, { session: false }, (error) => {
+//         if (error) {
+//           // Log the error for debugging
+//           console.error(error);
+//           return res.status(500).json({ message: "Internal server error" });
+//         }
+//         let token = generateJWTToken(user.toJSON());
+//         return res.json({ user, token });
+//       });
+//     })(req, res);
+//   });
+// };
