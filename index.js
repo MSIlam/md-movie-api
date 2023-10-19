@@ -29,7 +29,14 @@ const passport = require("passport");
 require("./passport");
 
 // connecting to the dtabase
-mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
+// local
+// mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// remote
+mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
