@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // CORS implementation
 const cors = require("cors");
-app.use(cosr());
+app.use(cors());
 
 let auth = require("./auth")(app);
 const passport = require("passport");
