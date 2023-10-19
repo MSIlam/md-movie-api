@@ -8,7 +8,7 @@ const { check, validationResult } = require("express-validator");
 const app = express();
 // const swaggerJSDoc = require("swagger-jsdoc");
 // const swaggerUi = require("swagger-ui-express");
-const uuid = require("uuid");
+// const uuid = require("uuid");
 
 // log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
