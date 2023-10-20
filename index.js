@@ -10,6 +10,8 @@ const app = express();
 // const swaggerUi = require("swagger-ui-express");
 const uuid = require("uuid");
 // importing the mongoose models
+const Movies = Models.Movie;
+const Users = Models.User;
 
 // log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
@@ -44,9 +46,9 @@ app.use(
   })
 );
 
-let auth = require("./auth")(app);
+let auth = require("./auth.js")(app);
 const passport = require("passport");
-require("./passport");
+require("./passport.js");
 
 // connecting to the dtabase
 // local
@@ -61,9 +63,6 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useUnifiedTopology: true,
 });
 
-const Movies = Models.Movie;
-const Users = Models.User;
-
 app.get("/", (req, res) => {
   let responseText = "Welcome to the movie world!";
   res.send(responseText);
@@ -71,16 +70,20 @@ app.get("/", (req, res) => {
 
 //
 // Return all users [Read]
-app.get("/users", async (req, res) => {
-  await Users.find()
-    .then((users) => {
-      res.status(201).json(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send("Error:" + err);
-    });
-});
+app.get(
+  "/users",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await Users.find()
+      .then((users) => {
+        res.status(201).json(users);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error:" + err);
+      });
+  }
+);
 
 //
 // Return all movies to the user [Read]
