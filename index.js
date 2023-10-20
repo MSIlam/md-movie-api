@@ -25,6 +25,7 @@ const cors = require("cors");
 let allowedOrigins = [
   "http://localhost:8080",
   "https://myflix-mi-e89972ef7472.herokuapp.com",
+  "https://cloud.mongodb.com/",
 ];
 
 app.use(
@@ -43,9 +44,9 @@ app.use(
   })
 );
 
-let auth = require("./auth.js")(app);
+let auth = require("./auth")(app);
 const passport = require("passport");
-require("./passport.js");
+require("./passport");
 
 // connecting to the dtabase
 // local
@@ -92,9 +93,9 @@ app.get(
       .then((movies) => {
         res.status(201).json(movies);
       })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error:" + err);
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error: " + error);
       });
   }
 );
@@ -170,10 +171,11 @@ app.post(
     }
 
     let hashedPassword = Users.hashPassword(req.body.Password);
-    await Users.findOne({ Username: req.body.Username })
+    await Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Username + "already exists");
+          //If the user is found, send a response that it already exists
+          return res.status(400).send(req.body.Username + " already exists");
         } else {
           Users.create({
             Username: req.body.Username,
@@ -186,13 +188,13 @@ app.post(
             })
             .catch((error) => {
               console.error(error);
-              res.status(500).send("Error" + error);
+              res.status(500).send("Error: " + error);
             });
         }
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send("Error:" + error);
+        res.status(500).send("Error: " + error);
       });
   }
 );
@@ -200,14 +202,14 @@ app.post(
 //
 // update user info by id
 app.put(
-  "/users/:_id",
+  "/users/:Username",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    if (req.user.UserID !== req.params.UserID) {
-      return res.status(400).send("Permission denied");
+    if (req.user.Username !== req.params.Username) {
+      return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
-      { UserID: req.params.UserID },
+      { Username: req.params.Username },
       {
         $set: {
           Username: req.body.Username,
@@ -217,17 +219,16 @@ app.put(
         },
       },
       { new: true }
-    )
-      .then((updateUser) => {
-        res.json(updateUser);
+    ) // This line makes sure that the updated document is returned
+      .then((updatedUser) => {
+        res.json(updatedUser);
       })
       .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error:" + err);
+        console.log(err);
+        res.status(500).send("Error: " + err);
       });
   }
 );
-
 //
 // Add a  movie to a user's list of favourites
 
@@ -299,5 +300,5 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
-  console.log("Listening on port" + port);
+  console.log("Listening on Port " + port);
 });

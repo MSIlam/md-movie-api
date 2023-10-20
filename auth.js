@@ -1,4 +1,4 @@
-const jwtSecret = "your_jwt_secret"; // This has to be the same key used in the JWTStrategy
+const jwtSecret = "your_jwt_secret";
 
 const jwt = require("jsonwebtoken"),
   passport = require("passport");
@@ -33,6 +33,7 @@ module.exports = (router) => {
     })(req, res);
   });
 };
+// This has to be the same key used in the JWTStrategy
 
 /* POST login. */
 // module.exports = (router) => {
