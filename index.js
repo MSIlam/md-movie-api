@@ -25,7 +25,6 @@ const cors = require("cors");
 let allowedOrigins = [
   "http://localhost:8080",
   "https://myflix-mi-e89972ef7472.herokuapp.com",
-  "https://cloud.mongodb.com/",
 ];
 
 app.use(

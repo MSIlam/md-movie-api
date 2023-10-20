@@ -1,7 +1,7 @@
 const jwtSecret = "your_jwt_secret";
 
-const jwt = require("jsonwebtoken"),
-  passport = require("passport");
+const jwt = require("jsonwebtoken");
+const passport = require("passport");
 
 require("./passport"); // Your local passport file
 
@@ -18,8 +18,8 @@ module.exports = (router) => {
   router.post("/login", (req, res) => {
     passport.authenticate("local", { session: false }, (error, user, info) => {
       if (error || !user) {
-        return res.status(400).json({
-          message: "Something is not right",
+        return res.status(401).json({
+          message: "Authentication failed. check your credentials",
           user: user,
         });
       }
@@ -33,30 +33,3 @@ module.exports = (router) => {
     })(req, res);
   });
 };
-// This has to be the same key used in the JWTStrategy
-
-/* POST login. */
-// module.exports = (router) => {
-//   router.post("/login", (req, res) => {
-//     passport.authenticate("local", { session: false }, (error, user, info) => {
-//       if (error) {
-//         // Log the error for debugging
-//         console.error(error);
-//         return res.status(500).json({ message: "Internal server error" });
-//       }
-//       if (!user) {
-//         // Authentication failed
-//         return res.status(401).json({ message: "Authentication failed" });
-//       }
-//       req.login(user, { session: false }, (error) => {
-//         if (error) {
-//           // Log the error for debugging
-//           console.error(error);
-//           return res.status(500).json({ message: "Internal server error" });
-//         }
-//         let token = generateJWTToken(user.toJSON());
-//         return res.json({ user, token });
-//       });
-//     })(req, res);
-//   });
-// };
