@@ -91,6 +91,7 @@ app.get(
     await Movies.find()
       .then((movies) => {
         res.status(200).json(movies);
+        console.log("Movies:", movies);
       })
       .catch((error) => {
         console.error(error);
