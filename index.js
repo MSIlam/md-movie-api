@@ -214,7 +214,7 @@ app.put(
           Username: req.body.Username,
           Password: req.body.Password,
           Email: req.body.Email,
-          Birthday: req.body.Birthday,
+          Birth_date: req.body.Birth_date,
         },
       },
       { new: true }
