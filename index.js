@@ -204,7 +204,7 @@ app.post(
 );
 
 //
-// update user info by id
+// update user info by username
 app.put(
   "/users/:Username",
   passport.authenticate("jwt", { session: false }),
