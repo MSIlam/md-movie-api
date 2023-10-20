@@ -12,9 +12,9 @@ let movieSchema = mongoose.Schema({
   },
   ImageURL: String,
   Stars: String,
-  Featured: Boolean,
+  Featured: String,
   Genres: {
-    genreName: String,
+    Name: String,
     Description: String,
   },
 });
