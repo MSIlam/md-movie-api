@@ -10,8 +10,6 @@ const app = express();
 // const swaggerUi = require("swagger-ui-express");
 const uuid = require("uuid");
 // importing the mongoose models
-const Movies = Models.Movie;
-const Users = Models.User;
 
 // log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
@@ -63,6 +61,9 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useUnifiedTopology: true,
 });
 
+const Movies = Models.Movie;
+const Users = Models.User;
+
 app.get("/", (req, res) => {
   let responseText = "Welcome to the movie world!";
   res.send(responseText);
@@ -83,26 +84,34 @@ app.get("/users", async (req, res) => {
 
 //
 // Return all movies to the user [Read]
-// app.get("/movies", async (req, res) => {
-//   await Movies.find()
-//     .then((movies) => {
-//       res.status(200).json(movies);
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.status(500).send("Error: " + error);
-//     });
-// });
-
-app.get("/movies", async (req, res) => {
-  try {
-    const movies = await Movies.find();
-    res.status(200).json(movies);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(`Error retrieving all movies: ${err}`);
+app.get(
+  "/movies",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await Movies.find()
+      .then((movies) => {
+        res.status(200).json(movies);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      });
   }
-});
+);
+
+// app.get(
+//   "/movies",
+//   passport.authenticate("jwt", { session: false }),
+//   async (req, res) => {
+//     try {
+//       const movies = await Movies.find();
+//       res.status(200).json(movies);
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send(`Error retrieving all movies: ${err}`);
+//     }
+//   }
+// );
 
 // //
 // Return data about a single movie by title to the user [Read]
