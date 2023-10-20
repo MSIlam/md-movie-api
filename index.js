@@ -84,20 +84,16 @@ app.get("/users", async (req, res) => {
 
 //
 // Return all movies to the user [Read]
-app.get(
-  "/movies",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    await Movies.find()
-      .then((movies) => {
-        res.status(200).json(movies);
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send("Error: " + error);
-      });
-  }
-);
+app.get("/movies", async (req, res) => {
+  await Movies.find()
+    .then((movies) => {
+      res.status(200).json(movies);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send("Error: " + error);
+    });
+});
 
 // //
 // Return data about a single movie by title to the user [Read]
@@ -301,3 +297,5 @@ const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
+
+// passport.authenticate("jwt", { session: false })
