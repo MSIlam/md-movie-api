@@ -153,7 +153,7 @@ app.get("/movies/Director/:Name", async (req, res) => {
 app.post(
   "/users",
   [
-    check("Username", "Username is required.").isLength({ min: 5 }),
+    check("Username", "Username is required").isLength({ min: 5 }),
     check(
       "Username",
       "Username contains non alphanumeric characters - not allowed."
@@ -162,7 +162,9 @@ app.post(
     check("Email", "Email does not appear to be valid").isEmail(),
   ],
   async (req, res) => {
+    // check the validation object for errors
     let errors = validationResult(req);
+
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
