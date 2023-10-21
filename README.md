@@ -1,2 +1,5 @@
 # md-movie-api
-### Using a combination of Node.js, Express application, and REST architecture an API is created that contains resources for a movie app development that would deliver many functionalities based on user demands.
+## Description
+### The project aims at creating a web application for movies. It will provide users with access to information about different movies, directors, and genres. Users will be able to sign up, update theirpersonal information, and create a list of their favorite movies.
+## Technical requirements
+#### <ul><li>The API must be a Node.js and Express application<li><ul>
