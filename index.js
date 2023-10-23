@@ -250,7 +250,7 @@ app.post(
 );
 
 //
-// Allow users to remove a movie from their list of favourits (showing only a text that a movie has been removed) [DELETE]
+// Allow users to remove a movie from their list of favorits  [DELETE]
 app.delete(
   "/users/:_id/:MovieId",
   passport.authenticate("jwt", { session: false }),
