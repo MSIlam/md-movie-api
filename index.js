@@ -198,10 +198,11 @@ app.post(
 //
 // update user info by username
 app.put(
-  "/users/:Username",
+  "/users/:userId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    if (req.user.Username !== req.params.Username) {
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    if (req.user.userId !== req.params.userId) {
       return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
@@ -209,7 +210,7 @@ app.put(
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
@@ -229,11 +230,11 @@ app.put(
 // Add a  movie to a user's list of favourites
 
 app.post(
-  "/users/:_id/:MovieId",
+  "/users/:userId/movies/:MovieId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
-      { _id: req.params._id },
+      { userId: req.params.userId },
       {
         $push: { FavouriteMovies: req.params.MovieId },
       },
@@ -252,12 +253,12 @@ app.post(
 //
 // Allow users to remove a movie from their list of favorits  [DELETE]
 app.delete(
-  "/users/:_id/:MovieId",
+  "/users/:userId/movies/:MovieId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
       const updatedUser = await Users.findOneAndUpdate(
-        { _id: req.params._id },
+        { userId: req.params.userId },
         {
           $pull: {
             FavouriteMovies: req.params.MovieId, // Assuming the MovieId is provided as a URL parameter
@@ -269,7 +270,7 @@ app.delete(
       if (!updatedUser) {
         res
           .status(404)
-          .json({ message: `User '${req.params.Username}' not found.` });
+          .json({ message: `User '${req.params.userId}' not found.` });
       } else {
         res.status(200).json(updatedUser);
       }
@@ -281,17 +282,17 @@ app.delete(
 );
 
 //
-// Delete user by username
+// Delete user by userid
 app.delete(
-  "/users/:Username",
+  "/users/:userId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Users.findOneAndRemove({ Username: req.params.Username })
+    await Users.findOneAndRemove({ userId: req.params.userId })
       .then((user) => {
         if (!user) {
-          res.status(400).send(req.params.Username + " was not found");
+          res.status(400).send(req.params.userId + " was not found");
         } else {
-          res.status(200).send(req.params.Username + " was deleted");
+          res.status(200).send(req.params.userId + " was deleted");
         }
       })
       .catch((err) => {
@@ -310,5 +311,3 @@ const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log("Listening on Port " + port);
 });
-
-// passport.authenticate("jwt", { session: false })
