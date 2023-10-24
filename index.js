@@ -206,7 +206,7 @@ app.put(
       return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       {
         $set: {
           Username: req.body.Username,
@@ -226,6 +226,7 @@ app.put(
       });
   }
 );
+
 //
 // Add a  movie to a user's list of favourites
 
@@ -234,7 +235,7 @@ app.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
-      { id: req.params.id },
+      { _id: req.params.id },
       {
         $push: { FavouriteMovies: req.params.MovieId },
       },
@@ -250,6 +251,45 @@ app.post(
   }
 );
 
+const mongoose = require("mongoose");
+
+// app.post(
+//   "/users/:id/movies/:MovieId",
+//   passport.authenticate("jwt", { session: false }),
+//   async (req, res) => {
+//     try {
+//       // Validate that MovieId is a valid MongoDB ObjectId
+//       if (!mongoose.Types.ObjectId.isValid(req.params.MovieId)) {
+//         return res.status(400).send("Invalid MovieId");
+//       }
+
+//       // Check if the movie with the provided MovieId exists
+//       const movie = await Movie.findById(req.params.MovieId);
+//       if (!movie) {
+//         return res.status(404).send("Movie not found");
+//       }
+
+//       // Update the user's list of favorite movies
+//       const updatedUser = await Users.findOneAndUpdate(
+//         { _id: req.params.id },
+//         {
+//           $push: { FavouriteMovies: req.params.MovieId },
+//         },
+//         { new: true }
+//       );
+
+//       if (!updatedUser) {
+//         return res.status(404).send("User not found");
+//       }
+
+//       res.json(updatedUser);
+//     } catch (err) {
+//       console.error(err);
+//       res.status(500).send("Error: " + err);
+//     }
+//   }
+// );
+
 //
 // Allow users to remove a movie from their list of favorits  [DELETE]
 app.delete(
@@ -258,7 +298,7 @@ app.delete(
   async (req, res) => {
     try {
       const updatedUser = await Users.findOneAndUpdate(
-        { userId: req.params.userId },
+        { _id: req.params.id },
         {
           $pull: {
             FavouriteMovies: req.params.MovieId, // Assuming the MovieId is provided as a URL parameter
@@ -268,9 +308,7 @@ app.delete(
       );
 
       if (!updatedUser) {
-        res
-          .status(404)
-          .json({ message: `User '${req.params.userId}' not found.` });
+        res.status(404).json({ message: `User '${req.params.id}' not found.` });
       } else {
         res.status(200).json(updatedUser);
       }
@@ -287,7 +325,7 @@ app.delete(
   "/users/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Users.findOneAndRemove({ userId: req.params.userId })
+    await Users.findOneAndRemove({ _id: req.params.id })
       .then((user) => {
         if (!user) {
           res.status(400).send(req.params.id + " was not found");
