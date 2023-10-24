@@ -251,8 +251,6 @@ app.post(
   }
 );
 
-const mongoose = require("mongoose");
-
 // app.post(
 //   "/users/:id/movies/:MovieId",
 //   passport.authenticate("jwt", { session: false }),
