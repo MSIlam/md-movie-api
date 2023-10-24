@@ -198,15 +198,15 @@ app.post(
 //
 // update user info by username
 app.put(
-  "/users/:id",
+  "/users/:_id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     let hashedPassword = Users.hashPassword(req.body.Password);
-    if (req.user.id !== req.params.id) {
+    if (req.user._id !== req.params._id) {
       return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params._id },
       {
         $set: {
           Username: req.body.Username,
