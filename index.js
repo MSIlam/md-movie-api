@@ -198,15 +198,15 @@ app.post(
 //
 // update user info by username
 app.put(
-  "/users/:userId",
+  "/users/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     let hashedPassword = Users.hashPassword(req.body.Password);
-    if (req.user.userId !== req.params.userId) {
+    if (req.user.id !== req.params.id) {
       return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
-      { Username: req.params.Username },
+      { id: req.params.id },
       {
         $set: {
           Username: req.body.Username,
@@ -230,11 +230,11 @@ app.put(
 // Add a  movie to a user's list of favourites
 
 app.post(
-  "/users/:userId/movies/:MovieId",
+  "/users/:id/movies/:MovieId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
-      { userId: req.params.userId },
+      { id: req.params.id },
       {
         $push: { FavouriteMovies: req.params.MovieId },
       },
@@ -253,7 +253,7 @@ app.post(
 //
 // Allow users to remove a movie from their list of favorits  [DELETE]
 app.delete(
-  "/users/:userId/movies/:MovieId",
+  "/users/:id/movies/:MovieId",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
@@ -284,15 +284,15 @@ app.delete(
 //
 // Delete user by userid
 app.delete(
-  "/users/:userId",
+  "/users/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Users.findOneAndRemove({ userId: req.params.userId })
       .then((user) => {
         if (!user) {
-          res.status(400).send(req.params.userId + " was not found");
+          res.status(400).send(req.params.id + " was not found");
         } else {
-          res.status(200).send(req.params.userId + " was deleted");
+          res.status(200).send(req.params.id + " was deleted");
         }
       })
       .catch((err) => {
