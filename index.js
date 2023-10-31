@@ -232,7 +232,7 @@ app.put(
 
 app.post(
   "/users/:id/movies/:MovieId",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
       { _id: req.params.id },
