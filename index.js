@@ -34,16 +34,16 @@ require("./passport.js");
 
 // connecting to the dtabase
 // local
-mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// remote
-// mongoose.connect(process.env.CONNECTION_URI, {
+// mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // });
+
+// remote
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.get("/", (req, res) => {
   let responseText = "Welcome to the movie world!";
