@@ -5,6 +5,7 @@ const Models = require("./models.js");
 const fs = require("fs");
 const path = require("path");
 const { check, validationResult } = require("express-validator");
+const { capitalizeFirstLetter } = require("./helpers.js");
 const app = express();
 // const swaggerJSDoc = require("swagger-jsdoc");
 // const swaggerUi = require("swagger-ui-express");
@@ -33,16 +34,16 @@ require("./passport.js");
 
 // connecting to the dtabase
 // local
-// mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-// remote
-mongoose.connect(process.env.CONNECTION_URI, {
+mongoose.connect("mongodb://127.0.0.1:27017/MyFlixDBMONGO", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+// remote
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
 app.get("/", (req, res) => {
   let responseText = "Welcome to the movie world!";
@@ -70,7 +71,7 @@ app.get(
 // Return all movies to the user [Read]
 app.get(
   "/movies",
-  // passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     await Movies.find()
       .then((movies) => {
@@ -87,10 +88,10 @@ app.get(
 // //
 // Return data about a single movie by title to the user [Read]
 app.get(
-  "/movies/:Title",
+  "/movies/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    await Movies.findOne({ Title: req.params.Title })
+    await Movies.findById(req.params.id)
       .then((movie) => {
         res.json(movie);
       })
@@ -103,17 +104,19 @@ app.get(
 
 // return data about a genre
 app.get(
-  "/movies/Genres/:Name",
+  "/movies/genres/:name",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const { Name } = req.params;
+    const { name } = req.params;
     try {
-      const movie = await Movies.findOne({ "Genres.Name": Name });
+      const movie = await Movies.findOne({
+        "Genres.Name": capitalizeFirstLetter(name),
+      });
       if (movie) {
         const genre = movie.Genres;
         res.status(200).json(genre);
       } else {
-        res.status(404).json({ message: `Genre "${Name}" not found.` });
+        res.status(404).json({ message: `Genre "${name}" not found.` });
       }
     } catch (err) {
       console.error(err);
@@ -125,18 +128,18 @@ app.get(
 //
 // Return data about a director (bio, birth year, death year) by name [Read]
 app.get(
-  "/movies/Director/:Name",
+  "/movies/directors/:name",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const { Name } = req.params;
+    const { name } = req.params;
     try {
       const movies = await Movies.findOne({
-        "Director.Name": Name,
+        "Director.Name": capitalizeFirstLetter(name),
       });
       if (movies) {
         res.json(movies.Director);
       } else {
-        res.status(404).json({ message: `Director "${Name}" not found.` });
+        res.status(404).json({ message: `Director "${name}" not found.` });
       }
     } catch (err) {
       console.error(err);
@@ -166,7 +169,7 @@ app.post(
       return res.status(422).json({ errors: errors.array() });
     }
 
-    let hashedPassword = Users.hashPassword(req.body.Password);
+    const hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
       .then((user) => {
         if (user) {
@@ -198,15 +201,16 @@ app.post(
 //
 // update user info by username
 app.put(
-  "/users/:_id",
+  "/users/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    let hashedPassword = Users.hashPassword(req.body.Password);
-    if (req.user._id !== req.params._id) {
+    const hashedPassword = Users.hashPassword(req.body.Password);
+    console.log(req.user._id.toString(), req.params.id);
+    if (req.user._id.toString() !== req.params.id) {
       return res.status(400).send("permission denied");
     }
     await Users.findOneAndUpdate(
-      { _id: req.params._id },
+      { _id: req.params.id },
       {
         $set: {
           Username: req.body.Username,
@@ -230,63 +234,63 @@ app.put(
 //
 // Add a  movie to a user's list of favourites
 
-app.post(
-  "/users/:id/movies/:MovieId",
-  passport.authenticate("jwt", { session: false }),
-  async (req, res) => {
-    await Users.findOneAndUpdate(
-      { _id: req.params.id },
-      {
-        $push: { FavouriteMovies: req.params.MovieId },
-      },
-      { new: true }
-    )
-      .then((updateUser) => {
-        res.json(updateUser);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
-  }
-);
-
 // app.post(
 //   "/users/:id/movies/:MovieId",
 //   passport.authenticate("jwt", { session: false }),
 //   async (req, res) => {
-//     try {
-//       // Validate that MovieId is a valid MongoDB ObjectId
-//       if (!mongoose.Types.ObjectId.isValid(req.params.MovieId)) {
-//         return res.status(400).send("Invalid MovieId");
-//       }
-
-//       // Check if the movie with the provided MovieId exists
-//       const movie = await Movie.findById(req.params.MovieId);
-//       if (!movie) {
-//         return res.status(404).send("Movie not found");
-//       }
-
-//       // Update the user's list of favorite movies
-//       const updatedUser = await Users.findOneAndUpdate(
-//         { _id: req.params.id },
-//         {
-//           $push: { FavouriteMovies: req.params.MovieId },
-//         },
-//         { new: true }
-//       );
-
-//       if (!updatedUser) {
-//         return res.status(404).send("User not found");
-//       }
-
-//       res.json(updatedUser);
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).send("Error: " + err);
-//     }
+//     await Users.findOneAndUpdate(
+//       { _id: req.params.id },
+//       {
+//         $push: { FavouriteMovies: req.params.MovieId },
+//       },
+//       { new: true }
+//     )
+//       .then((updateUser) => {
+//         res.json(updateUser);
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//         res.status(500).send("Error: " + err);
+//       });
 //   }
 // );
+
+app.post(
+  "/users/:id/movies/:MovieId",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      // Validate that MovieId is a valid MongoDB ObjectId
+      if (!mongoose.Types.ObjectId.isValid(req.params.MovieId)) {
+        return res.status(400).send("Invalid MovieId");
+      }
+
+      // Check if the movie with the provided MovieId exists
+      const movie = await Movies.findById(req.params.MovieId);
+      if (!movie) {
+        return res.status(404).send("Movie not found");
+      }
+
+      // Update the user's list of favorite movies
+      const updatedUser = await Users.findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $addToSet: { FavouriteMovies: req.params.MovieId },
+        },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Error: " + err);
+    }
+  }
+);
 
 //
 // Allow users to remove a movie from their list of favorits  [DELETE]
