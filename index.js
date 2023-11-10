@@ -88,6 +88,21 @@ app.get(
 // //
 // Return data about a single movie by title to the user [Read]
 app.get(
+  "/users/:id",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    await Users.findById(req.params.id)
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error:" + err);
+      });
+  }
+);
+// Return data about a single movie by title to the user [Read]
+app.get(
   "/movies/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
