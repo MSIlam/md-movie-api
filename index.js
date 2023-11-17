@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const Models = require("./models.js");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 const { check, validationResult } = require("express-validator");
 const { capitalizeFirstLetter } = require("./helpers.js");
 const app = express();
@@ -14,6 +15,28 @@ const uuid = require("uuid");
 const Movies = Models.Movie;
 const Users = Models.User;
 
+// cors implementation of web server
+let allowedOrigins = [
+  "http://localhost:8080",
+  "http://localhost:1234",
+  "https://myflix-mi.netlify.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn’t found on the list of allowed origins
+        let message =
+          "The CORS policy for this application doesn’t allow access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 // log file
 const accessLogStream = fs.createWriteStream(path.join(__dirname, "log.txt"), {
   flags: "a",
@@ -25,8 +48,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // CORS implementation
-const cors = require("cors");
-app.use(cors());
+// app.use(cors());
 
 let auth = require("./auth.js")(app);
 const passport = require("passport");
@@ -50,24 +72,6 @@ app.get("/", (req, res) => {
   res.send(responseText);
 });
 
-//
-// Return all users [Read]
-// app.get(
-//   "/users",
-//   passport.authenticate("jwt", { session: false }),
-//   async (req, res) => {
-//     await Users.find()
-//       .then((users) => {
-//         res.status(201).json(users);
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         res.status(500).send("Error:" + err);
-//       });
-//   }
-// );
-
-//
 // Return all movies to the user [Read]
 app.get(
   "/movies",
@@ -248,27 +252,6 @@ app.put(
 
 //
 // Add a  movie to a user's list of favourites
-
-// app.post(
-//   "/users/:id/movies/:MovieId",
-//   passport.authenticate("jwt", { session: false }),
-//   async (req, res) => {
-//     await Users.findOneAndUpdate(
-//       { _id: req.params.id },
-//       {
-//         $push: { FavouriteMovies: req.params.MovieId },
-//       },
-//       { new: true }
-//     )
-//       .then((updateUser) => {
-//         res.json(updateUser);
-//       })
-//       .catch((err) => {
-//         console.error(err);
-//         res.status(500).send("Error: " + err);
-//       });
-//   }
-// );
 
 app.post(
   "/users/:id/movies/:MovieId",
