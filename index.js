@@ -20,6 +20,7 @@ let allowedOrigins = [
   "http://localhost:8080",
   "http://localhost:1234",
   "https://myflix-mi.netlify.app",
+  "http://localhost:4200/",
 ];
 
 app.use(
@@ -29,7 +30,7 @@ app.use(
       if (allowedOrigins.indexOf(origin) === -1) {
         // If a specific origin isn’t found on the list of allowed origins
         let message =
-          "The CORS policy for this application doesn’t allow access from origin " +
+          "The CORS policy for this application doesn't allow access from origin " +
           origin;
         return callback(new Error(message), false);
       }
@@ -80,7 +81,6 @@ app.get(
     await Movies.find()
       .then((movies) => {
         res.status(200).json(movies);
-        console.log("Movies:", movies);
       })
       .catch((error) => {
         console.error(error);
@@ -90,7 +90,7 @@ app.get(
 );
 
 // //
-// Return data about a single movie by title to the user [Read]
+// Return data about a user by id to the user [Read]
 app.get(
   "/users/:id",
   passport.authenticate("jwt", { session: false }),
@@ -105,7 +105,7 @@ app.get(
       });
   }
 );
-// Return data about a single movie by title to the user [Read]
+// Return data about a single movie by id to the user [Read]
 app.get(
   "/movies/:id",
   passport.authenticate("jwt", { session: false }),
@@ -218,7 +218,7 @@ app.post(
 );
 
 //
-// update user info by username
+// update user info by useriD
 app.put(
   "/users/:id",
   passport.authenticate("jwt", { session: false }),
