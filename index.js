@@ -23,7 +23,7 @@ let allowedOrigins = [
   "http://localhost:4200",
   "https://msilam.github.io/myFlix-Angular-client/",
   "https://cute-medovik-3c0b89.netlify.app",
-  "https://my-flix-angular-client-rl5m7x43i.vercel.app/myFlix-Angular-client/",
+  "https://my-flix-angular-client-rl5m7x43i.vercel.app",
 ];
 
 app.use(
